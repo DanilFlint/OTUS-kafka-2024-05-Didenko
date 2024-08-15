@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 public class Utils {
     public static Logger log = LoggerFactory.getLogger("appl");
-    public static final String HOST = "192.168.0.103:9091";
+    public static final String HOST = "192.168.0.102:9091";
 
     public static final Map<String, Object> producerConfig = Map.of(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, HOST,

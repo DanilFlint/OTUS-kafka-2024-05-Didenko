@@ -25,12 +25,30 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9191,PLAINTEXT_HOST://192.168.0.103:9091
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9191,PLAINTEXT_HOST://192.168.0.102:9091
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
     ports:
       - "9191:9191"
-      - "9091:9091"  
+      - "9091:9091"
+
+  kafka2:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka2
+    depends_on:
+      zookeeper:
+        condition: service_healthy
+    healthcheck:
+      test: "test $$( /usr/bin/zookeeper-shell zookeeper:2181 get /brokers/ids/2 | grep { ) != ''"
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9192,PLAINTEXT_HOST://192.168.0.102:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+    ports:
+      - "9192:9192"
+      - "9092:9092"
 
   kafdrop:
     image: obsidiandynamics/kafdrop:4.0.1
@@ -43,3 +61,4 @@ services:
       JVM_OPTS: "-XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
     depends_on:
       - "kafka"
+      - "kafka2"

@@ -3,7 +3,7 @@ package ru.danil;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 
-public class Main {
+public class Producer {
     public static void main(String[] args) {
 
         Utils.log.info("Hello");
